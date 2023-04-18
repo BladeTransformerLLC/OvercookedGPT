@@ -2,7 +2,7 @@
 An OpenAI gym environment to evaluate the ability of large language models (LLMs; eg. GPT-4) in long-horizon reasoning and task planning in dynamic multi-agent settings based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1].
 
 ## Introduction
-There is a new area of AI research where foundation models such as LLMs are used for decision making in complex environments that involve long-horizon reasoning, control, and planning [2]. For instance, [Text2Motion](https://sites.google.com/stanford.edu/text2motion) [3] enables robots to solve sequential manipulation tasks by using LLMs. OvercookedGPT is an interactive 2D environment where OpenAI's GPT-4/3.5-Turbo generates intertemporal and sequential tasks to control multiple agents to achieve a goal (i.e., cook food). It is based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1] and was also inspired by [overcooked_ai](https://github.com/HumanCompatibleAI/overcooked_ai) [4], which is used in [5]).
+There is a new area of AI research where foundation models such as LLMs are used for decision making in complex environments that involve long-horizon reasoning, control, and planning [2]. For instance, [Text2Motion](https://sites.google.com/stanford.edu/text2motion) [3] enables robots to solve sequential manipulation tasks by using LLMs. OvercookedGPT is an interactive 2D environment where OpenAI's GPT-4/3.5-Turbo generates intertemporal and sequential tasks to control multiple agents to achieve a goal (i.e., cook food). It is based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1] and was also inspired by [overcooked_ai](https://github.com/HumanCompatibleAI/overcooked_ai) [4], which is used in [5].
 
 ## Installation
 ```
