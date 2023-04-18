@@ -1,0 +1,12 @@
+dill==0.3.2
+gym==0.17.2
+openai==0.27.0
+matplotlib==3.3.2
+networkx==2.5
+numpy==1.19.2
+pandas==1.1.2
+Pillow>=8.1.1
+scipy==1.5.2
+seaborn==0.11.0
+termcolor==1.1.0
+pynput==1.7.6
