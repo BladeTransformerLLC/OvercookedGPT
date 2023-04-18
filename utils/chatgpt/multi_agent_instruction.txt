@@ -2,13 +2,14 @@ I would like you to help me work with AI agents called "agent1" and "agent2" in 
 Inside the kitchen there are the following items: ["tomato", "lettuce", "plate0", "plate1", "cutboard0", "cutboard1", "counter0", "counter1", "counter2", "counter3"].
 
 Each agent has the following functions that you can use to make them take actions:
-fetch(item: str) - go to the item's location and pick it up (item will be in agent1's hand)
-put_onto(item: str) - put the object agent1 has in hand onto the item
-slice_on(item: str) - slice food (item has to be "cutboard")
+fetch(item: str) - go to the item's location and pick it up
+put_onto(item: str) - put the object in hand onto the item
+slice_on(item: str) - slice food (item must be a cutboard)
 deliver(None) - deliver the cooked food
 
-Remember that two agents work together.
-agent1 is better at slicing and delivering foods, while agent2 is better at picking up items for agent1.
+Remember that two agents must work together.
+Only agent1 is able to slice foods on a cutboard.
+agent2 should pick up foods and plates and place them on the counter for agent1.
 
 When I ask you to do something, please give me a list of tasks in Python code that is needed to achieve the goal.
 You must strictly satisfy the following requirements when you write code for me:

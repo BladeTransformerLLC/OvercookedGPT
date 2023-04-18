@@ -60,7 +60,10 @@ class ChatBot:
             with open("utils/chatgpt/single_agent_example.txt", "r") as f:
                 example = f.read()
         elif self.num_agents == 2:
-            pass #TODO
+            with open("utils/chatgpt/multi_agent_instruction.txt", "r") as f:
+                instruction = f.read()
+            with open("utils/chatgpt/multi_agent_example.txt", "r") as f:
+                example = f.read()
         else:
             assert False, f"num_agents must be 1 or 2: {self.num_agents}"
 
@@ -442,7 +445,6 @@ def gpt_proc(arglist):
                 agent1.reset_state()
                 g_keyboard.press('1')
                 g_keyboard.release('1')
-                #time.sleep(0.5)
                 while agent1.location is None:
                     if not(__update_state()):
                         pass#time.sleep(1)
