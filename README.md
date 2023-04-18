@@ -1,5 +1,8 @@
-# OvercookedGPT
-An OpenAI gym environment to evaluate the ability of large language models (LLMs; eg. GPT-4) in long-horizon reasoning and task planning in dynamic multi-agent settings based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1] (also highly inspired by [2]).
+# OvercookedGPT (WIP)
+An OpenAI gym environment to evaluate the ability of large language models (LLMs; eg. GPT-4) in long-horizon reasoning and task planning in dynamic multi-agent settings based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1].
+
+## Introduction
+There is a new area of AI research where foundation models such as LLMs are used for decision making in complex environments that involve long-horizon reasoning, control, and planning [2]. For instance, [Text2Motion](https://sites.google.com/stanford.edu/text2motion) [3] enables robots to solve sequential manipulation tasks by using LLMs. OvercookedGPT is an interactive 2D environment where OpenAI's GPT-4/3.5-Turbo generates intertemporal and sequential tasks to control multiple agents to achieve a goal (i.e., cook food). It is based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1] and was also inspired by [overcooked_ai](https://github.com/HumanCompatibleAI/overcooked_ai) [4], which is used in [5]).
 
 ## Installation
 ```
@@ -12,9 +15,14 @@ pip3 install -r requirements.txt
 Set the `OPENAI_API_KEY` environment variable (alternatively put the key string in `utils/chatgpt/openai.json`)
 
 ## Usage
-Start a single-agent simulation (enter a task eg. "Make a tomato and lettuce salad."):
+Start a single-agent simulation (enter a task eg. "Make a tomato and lettuce salad and deliver it."):
 ```
 python3 main.py --num-agents 1 --level partial-divider_salad --gpt
+```
+
+Start a multi-agent simulation:
+```
+python3 main.py --num-agents 2 --level partial-divider_salad --gpt
 ```
 
 Mannually control agents with arrow keys (switch between agents by pressing 1 or 2):
@@ -23,5 +31,8 @@ python3 main.py --num-agents 2 --level partial-divider_salad --gpt --manual
 ```
 
 ## References
-1. Wu et. al., 2021, "Too many cooks: Bayesian inference for coordinating multi-agent collaboration."
-2. Hong et. al., 2023, "Learning to Influence Human Behavior with Offline Reinforcement Learning."
+1. Wu et. al., ["Too many cooks: Bayesian inference for coordinating multi-agent collaboration,"](https://arxiv.org/abs/2003.11778) 2021.
+2. Yang et. al., ["Foundation Models for Decision Making: Problems, Methods, and Opportunities,"](https://arxiv.org/abs/2303.04129) 2023.
+3. Lin et. al., ["Text2Motion: From Natural Language Instructions to Feasible Plans,"](https://arxiv.org/abs/2303.12153) 2023.
+4. Carroll et. al., ["On the Utility of Learning about Humansfor Human-AI Coordination,"](https://arxiv.org/abs/1910.05789) 2020.
+5. Hong et. al., ["Learning to Influence Human Behavior with Offline Reinforcement Learning,"](https://arxiv.org/abs/2303.02265) 2023.
