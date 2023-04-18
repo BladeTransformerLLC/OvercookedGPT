@@ -1,3 +1,25 @@
+# Files
+*.zip
+*.out
+*.pkl
+#*.pdf
+*.mov
+
+# Metrics and data
+misc/metrics/*data*/
+misc/metrics/*graph*/
+misc/metrics/*recipe*/
+misc/game/record/
+misc/game/screenshots/
+
+# Visualizations
+visualize_all.sh
+visualize_level.py
+misc/visualizations/
+
+# Human experiments
+human_experiments/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
