@@ -2,7 +2,7 @@
 An OpenAI gym environment to evaluate the ability of large language models (LLMs; eg. GPT-4) in long-horizon reasoning and task planning in dynamic multi-agent settings based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1].
 
 <a href="https://www.youtube.com/watch?v=4LmcpkS53Wg" target="_blank">
- <img src="http://img.youtube.com/vi/4LmcpkS53Wg/mqdefault.jpg" alt="Watch the video" width="480" height="240" border="10" />
+ <img src="http://img.youtube.com/vi/4LmcpkS53Wg/hqdefault.jpg" alt="Watch the video" width="480" height="320" border="10" />
 </a>
 <br />
 https://www.youtube.com/watch?v=4LmcpkS53Wg
