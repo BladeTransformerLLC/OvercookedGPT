@@ -296,7 +296,7 @@ class GPTAgent:
 
 
 def gpt_proc(arglist):
-    listener = Listener(("localhost", 6000))#, authkey=b"password") # family is deduced to be 'AF_INET'
+    listener = Listener(("localhost", 6000)) # family is deduced to be 'AF_INET'
     #print(colors.GREEN + f"GPT listener.address: {listener.address}" + colors.ENDC)
     connection = None
     #listener.close() #todo
@@ -304,7 +304,7 @@ def gpt_proc(arglist):
     agent1 = GPTAgent(1, arglist)
     agent2 = GPTAgent(2, arglist)
 
-    global g_chatbot, g_openai_config, g_keyboard
+    global g_chatbot, g_openai_config
     g_chatbot = ChatBot(g_openai_config, arglist)
 
     ##########################################################
@@ -362,19 +362,30 @@ def gpt_proc(arglist):
             task_queue.append((agent1.deliver, None))
         elif arglist.num_agents == 2:
             task_queue.append((agent2.fetch, "tomato"))
-            task_queue.append((agent2.put_onto, "counter"))
+            task_queue.append((agent2.put_onto, "counter0"))
             task_queue.append((agent1.fetch, "tomato"))
-            task_queue.append((agent1.put_onto, "cutboard"))
-            task_queue.append((agent1.slice_on, "cutboard"))
+            task_queue.append((agent1.put_onto, "cutboard0"))
+            task_queue.append((agent1.slice_on, "cutboard0"))
             task_queue.append((agent2.fetch, "lettuce"))
-            task_queue.append((agent2.put_onto, "counter"))
+            task_queue.append((agent2.put_onto, "counter0"))
+            task_queue.append((agent1.fetch, "lettuce"))
+            task_queue.append((agent1.put_onto, "cutboard1"))
+            task_queue.append((agent1.slice_on, "cutboard1"))
+            task_queue.append((agent2.fetch, "plate0"))
+            task_queue.append((agent2.put_onto, "counter0"))
+            task_queue.append((agent1.fetch, "tomato"))
+            task_queue.append((agent1.put_onto, "counter0"))
+            task_queue.append((agent1.fetch, "lettuce"))
+            task_queue.append((agent1.put_onto, "counter0"))
+            task_queue.append((agent1.fetch, "lettuce"))
+            task_queue.append((agent1.deliver, None))
         else:
             assert False, f"arglist.num_agents must be 1 or 2: {arglist.num_agents}"
     else:
         time.sleep(2)
         sys.stdin = open(0)  # input() does not work with multiprocessing without this line
         question = input(colors.GREEN + "Enter a task: " + colors.ENDC)
-        print(colors.YELLOW + "ChatGPT: Thinking. Please wait..." + colors.ENDC)
+        print(colors.YELLOW + "ChatGPT: Thinking...please wait..." + colors.ENDC)
         num_retries = 0
         max_retries = 5
         while num_retries < max_retries:
@@ -425,28 +436,31 @@ def gpt_proc(arglist):
             f = task_queue[j][0]
             arg = task_queue[j][1]
 
+            global g_keyboard
             if str(agent1) in str(f):
                 print("agent1 is in the task")
+                agent1.reset_state()
                 g_keyboard.press('1')
                 g_keyboard.release('1')
-                agent1.reset_state()
+                #time.sleep(0.5)
                 while agent1.location is None:
                     if not(__update_state()):
-                        time.sleep(1)
+                        pass#time.sleep(1)
             elif str(agent2) in str(f):
                 print("agent2 is in the task")
+                agent2.reset_state()
                 g_keyboard.press('2')
                 g_keyboard.release('2')
-                agent2.reset_state()
+                #time.sleep(0.5)
                 while agent2.location is None:
                     if not(__update_state()):
-                        time.sleep(1)
+                        pass#time.sleep(1)
 
             if f(arg):
                 print(colors.GREEN + f"task complete: {str(f)}({str(arg)})" + colors.ENDC)
                 j += 1
                 if j == len(task_queue):
-                    print(colors.GREEN + "ALL TASKS COMPLETE" + colors.ENDC)
+                    print(colors.GREEN + f"ALL TASKS COMPLETE: score={i} (lower the better)" + colors.ENDC)
                     done = True
 
 

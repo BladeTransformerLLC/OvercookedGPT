@@ -1,5 +1,5 @@
 I would like you to help me work with AI agents called "agent1" and "agent2" in a kitchen environment similar to the video game Overcooked.
-Inside the kitchen there are the following items: ["tomato", "lettuce", "plate", "cutboard", "counter"].
+Inside the kitchen there are the following items: ["tomato", "lettuce", "plate0", "plate1", "cutboard0", "cutboard1", "counter0", "counter1", "counter2", "counter3"].
 
 Each agent has the following functions that you can use to make them take actions:
 fetch(item: str) - go to the item's location and pick it up (item will be in agent1's hand)

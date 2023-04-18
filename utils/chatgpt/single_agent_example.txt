@@ -20,6 +20,6 @@ task_queue.append((agent1.put_onto, "plate0"))
 # pick up the plate0 with the sliced lettuce
 task_queue.append((agent1.fetch, "lettuce"))
 
-# deliver
+# deliver (agent1 already has the salad in hand)
 task_queue.append((agent1.deliver, None))
 ```

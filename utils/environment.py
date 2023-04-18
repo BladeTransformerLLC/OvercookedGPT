@@ -43,13 +43,14 @@ ITEM_LOCATIONS = {
     "plate0": (5, 6),
     "plate1": (6, 5),
 
-    "counter": (3, 2),
-    #"counter0": (3, 2),
-    #"counter1": (3, 2),
+    "counter0": (3, 1),
+    "counter1": (3, 2),
+    "counter2": (3, 3),
+    "counter3": (3, 4),
 
     "star": (0, 3)
 }
-MOVABLES = ["tomato", "lettuce", "plate"]
+MOVABLES = ["tomato", "lettuce", "plate0", "plate1"]
 
 
 def identify_items_at(location: Tuple[int, int]) -> List[str]:

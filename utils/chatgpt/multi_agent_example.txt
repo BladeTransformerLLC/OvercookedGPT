@@ -2,24 +2,36 @@
 # the goal is to make a lettuce salad. Think about what tasks need to be accomplished step by step.
 task_queue = []
 
-# 1. pick up lettuce
+# 1. agent2 picks up lettuce
+task_queue.append((agent2.fetch, "lettuce"))
+
+# 2. agent2 puts the lettuce onto counter0 (agent2 already has lettuce in hand)
+task_queue.append((agent2.put_onto, "counter0"))
+
+# 3. agent1 picks up the lettuce from counter0
 task_queue.append((agent1.fetch, "lettuce"))
 
-# 2. put the lettuce onto the cutboard (agent1 already has lettuce in hand)
-task_queue.append((agent1.put_onto, "cutboard"))
+# 4. agent1 puts the lettuce onto cutboard0 (agent1 already has lettuce in hand)
+task_queue.append((agent2.put_onto, "cutboard0"))
 
-# 3. slice the lettuce (lettuce is already on the cutboard)
-task_queue.append((agent1.slice_on, "cutboard"))
+# 5. agent1 slices the lettuce (lettuce is already on cutboard0)
+task_queue.append((agent1.slice_on, "cutboard0"))
 
-# 4. pick up the sliced lettuce
+# 6. agent2 picks up plate0
+task_queue.append((agent2.fetch, "plate0"))
+
+# 7. agent2 puts plate0 onto counter0
+task_queue.append((agent2.put_onto, "counter0"))
+
+# 8. agent1 picks up the sliced lettuce
 task_queue.append((agent1.fetch, "lettuce"))
 
-# put the sliced lettuce onto the plate (agent1 already has the sliced lettuce in hand)
-task_queue.append((agent1.put_onto, "plate"))
+# 9. agent1 puts the sliced lettuce onto plate0 (agent1 already has the sliced lettuce in hand)
+task_queue.append((agent1.put_onto, "plate0"))
 
-# pick up the plate with the sliced lettuce
+# 10. agent1 picks up the plate with the sliced lettuce
 task_queue.append((agent1.fetch, "lettuce"))
 
-# deliver the plate
+# 11. agent1 delivers (agent1 already has the salad in hand)
 task_queue.append((agent1.deliver, None))
 ```
