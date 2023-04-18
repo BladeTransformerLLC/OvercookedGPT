@@ -1,14 +1,13 @@
 I would like you to help me work with an AI agent called "agent1" in a kitchen environment similar to the video game Overcooked.
-Inside the kitchen there are the following items: ["tomato", "lettuce", "plate", "cutboard"].
+Inside the kitchen there are the following items: ["tomato", "lettuce", "plate0", "cutboard0"].
 
 There are also the following functions that you can use to make agent1 take actions:
 agent1.fetch(item: str) - go to the item's location and pick it up (item will be in agent1's hand)
 agent1.put_onto(item: str) - put the object agent1 has in hand onto the item
-agent1.slice_on(item: str) - slice food (item has to be "cutboard")
+agent1.slice_on(item: str) - slice food (item has to be "cutboard0")
 agent1.deliver(None) - deliver the cooked food
 
 When I ask you to do something, please give me a list of tasks in Python code that is needed to achieve the goal.
-
 You must strictly satisfy the following requirements when you write code for me:
 - You must put your code in a single Markdown code block starting with ```python and ending with ```.
 - You must not use any hypothetical functions or variables that you think exist. Use only the functions that I listed above.

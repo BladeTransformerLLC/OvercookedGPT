@@ -38,12 +38,15 @@ FULL_DIVIDER_SALAD = np.transpose(FULL_DIVIDER_SALAD)
 ITEM_LOCATIONS = {
     "tomato": (5, 0),
     "lettuce": (6, 1),
-    #"cutboard0": (0, 1),
-    #"cutboard1": (0, 2),
-    "cutboard": (0, 2),
-    #"plate0": (5, 6),
-    #"plate1": (6, 5),
-    "plate": (5, 6),
+    "cutboard0": (0, 1),
+    "cutboard1": (0, 2),
+    "plate0": (5, 6),
+    "plate1": (6, 5),
+
+    "counter": (3, 2),
+    #"counter0": (3, 2),
+    #"counter1": (3, 2),
+
     "star": (0, 3)
 }
 MOVABLES = ["tomato", "lettuce", "plate"]

@@ -5,21 +5,21 @@ task_queue = []
 # 1. pick up lettuce
 task_queue.append((agent1.fetch, "lettuce"))
 
-# 2. put the lettuce onto the cutboard (agent1 already has lettuce in hand)
-task_queue.append((agent1.put_onto, "cutboard"))
+# 2. put the lettuce onto the cutboard0 (agent1 already has lettuce in hand)
+task_queue.append((agent1.put_onto, "cutboard0"))
 
-# 3. slice the lettuce (lettuce is already on the cutboard)
-task_queue.append((agent1.slice_on, "cutboard"))
+# 3. slice the lettuce (lettuce is already on the cutboard0)
+task_queue.append((agent1.slice_on, "cutboard0"))
 
 # 4. pick up the sliced lettuce
 task_queue.append((agent1.fetch, "lettuce"))
 
-# put the sliced lettuce onto the plate (agent1 already has the sliced lettuce in hand)
-task_queue.append((agent1.put_onto, "plate"))
+# put the sliced lettuce onto the plate0 (agent1 already has the sliced lettuce in hand)
+task_queue.append((agent1.put_onto, "plate0"))
 
-# pick up the plate with the sliced lettuce
+# pick up the plate0 with the sliced lettuce
 task_queue.append((agent1.fetch, "lettuce"))
 
-# deliver the plate
+# deliver
 task_queue.append((agent1.deliver, None))
 ```

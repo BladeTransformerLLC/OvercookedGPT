@@ -1,7 +1,5 @@
 # (C) Yoshi Sato <satyoshi.com>
 
-#TODO: dynamically cycle through agents by pressing 1, 2, ... in multi-agent sim
-
 import time
 #import signal
 from multiprocessing.connection import Listener
@@ -94,13 +92,12 @@ class ChatBot:
             return colors.RED + f"ERROR: {e}" + colors.ENDC
 
 g_chatbot = None
-
+g_keyboard = Controller()
 
 class GPTAgent:
     def __init__(self, id: int, arglist):
         assert 0 <= id <= 4
         self.id = id
-        self.keyboard = Controller()
         self.location = None
         self.on_hand = None
         self.level = None
@@ -193,21 +190,22 @@ class GPTAgent:
         dx = destination[0] - self.location[0]
         dy = destination[1] - self.location[1]
         print(colors.YELLOW + f"agent{self.id}.move_to(): source={self.location}, destination={destination}, (dx, dy) = ({dx}, {dy})" + colors.ENDC)
+        global g_keyboard
         if dx < 0:
-            self.keyboard.press(Key.left)
-            self.keyboard.release(Key.left)
+            g_keyboard.press(Key.left)
+            g_keyboard.release(Key.left)
             return False
         elif dx > 0:
-            self.keyboard.press(Key.right)
-            self.keyboard.release(Key.right)
+            g_keyboard.press(Key.right)
+            g_keyboard.release(Key.right)
             return False
         if dy < 0:
-            self.keyboard.press(Key.up)
-            self.keyboard.release(Key.up)
+            g_keyboard.press(Key.up)
+            g_keyboard.release(Key.up)
             return False
         elif dy > 0:
-            self.keyboard.press(Key.down)
-            self.keyboard.release(Key.down)
+            g_keyboard.press(Key.down)
+            g_keyboard.release(Key.down)
             return False
 
     def fetch(self, item: str) -> bool:
@@ -288,7 +286,8 @@ class GPTAgent:
         destination[0] += 1
         if self.move_to(tuple(destination)):
             # reached the destination
-            self.keyboard.press(Key.left)
+            global g_keyboard
+            g_keyboard.press(Key.left)
             return True
         return False
 
@@ -303,9 +302,9 @@ def gpt_proc(arglist):
     #listener.close() #todo
 
     agent1 = GPTAgent(1, arglist)
-    agent2 = GPTAgent(1, arglist)
+    agent2 = GPTAgent(2, arglist)
 
-    global g_chatbot, g_openai_config
+    global g_chatbot, g_openai_config, g_keyboard
     g_chatbot = ChatBot(g_openai_config, arglist)
 
     ##########################################################
@@ -314,7 +313,7 @@ def gpt_proc(arglist):
         Returns:
             bool: success or failure
         """
-        nonlocal listener, connection, agent1
+        nonlocal listener, connection, agent1, agent2
         if listener.last_accepted is None:
             try:
                 connection = listener.accept() # blocking
@@ -334,6 +333,8 @@ def gpt_proc(arglist):
                     agent_id: int = msg[1]
                     if agent_id == 1:
                         agent1.set_state(location=msg[2], action_str=msg[3], action_loc=msg[4])
+                    elif agent_id == 2:
+                        agent2.set_state(location=msg[2], action_str=msg[3], action_loc=msg[4])
 
                 #else:
                 #    print("WARNING: no new data from client")
@@ -341,31 +342,39 @@ def gpt_proc(arglist):
                     print(colors.RED + f"Exception in __update_state(): {e}" + colors.ENDC)
                     return False
             return True
+        return False
     ##########################################################
 
     if arglist.debug:
         task_queue = []
         if arglist.num_agents == 1:
             task_queue.append((agent1.fetch, "tomato"))
-            task_queue.append((agent1.put_onto, "cutboard"))
-            task_queue.append((agent1.slice_on, "cutboard"))
+            task_queue.append((agent1.put_onto, "cutboard0"))
+            task_queue.append((agent1.slice_on, "cutboard0"))
             task_queue.append((agent1.fetch, "tomato"))
-            task_queue.append((agent1.put_onto, "plate"))
+            task_queue.append((agent1.put_onto, "plate0"))
             task_queue.append((agent1.fetch, "lettuce"))
-            task_queue.append((agent1.put_onto, "cutboard"))
-            task_queue.append((agent1.slice_on, "cutboard"))
+            task_queue.append((agent1.put_onto, "cutboard0"))
+            task_queue.append((agent1.slice_on, "cutboard0"))
             task_queue.append((agent1.fetch, "lettuce"))
-            task_queue.append((agent1.put_onto, "plate"))
+            task_queue.append((agent1.put_onto, "plate0"))
             task_queue.append((agent1.fetch, "lettuce"))
             task_queue.append((agent1.deliver, None))
         elif arglist.num_agents == 2:
-            pass #TODO
+            task_queue.append((agent2.fetch, "tomato"))
+            task_queue.append((agent2.put_onto, "counter"))
+            task_queue.append((agent1.fetch, "tomato"))
+            task_queue.append((agent1.put_onto, "cutboard"))
+            task_queue.append((agent1.slice_on, "cutboard"))
+            task_queue.append((agent2.fetch, "lettuce"))
+            task_queue.append((agent2.put_onto, "counter"))
         else:
             assert False, f"arglist.num_agents must be 1 or 2: {arglist.num_agents}"
     else:
         time.sleep(2)
         sys.stdin = open(0)  # input() does not work with multiprocessing without this line
-        question = input(colors.YELLOW + "Enter a task: " + colors.ENDC)
+        question = input(colors.GREEN + "Enter a task: " + colors.ENDC)
+        print(colors.YELLOW + "ChatGPT: Thinking. Please wait..." + colors.ENDC)
         num_retries = 0
         max_retries = 5
         while num_retries < max_retries:
@@ -388,7 +397,7 @@ def gpt_proc(arglist):
                     print("\nPlease wait while I execute the above code...")
                     try:
                         # existing local vars must be given explicitly as a dict
-                        ldict = {"agent1": agent1}
+                        ldict = {"agent1": agent1, "agent2": agent2}
                         exec(code, globals(), ldict)#locals())
                         task_queue = ldict["task_queue"]
                         print("Done executing code.")
@@ -399,7 +408,7 @@ def gpt_proc(arglist):
                         question = "While executing your code I've encountered the following error: {}\nPlease fix the error and show me valid code.".format(e)
                         continue
         print("Excecuting the task queue in the simulator...")
-        time.sleep(5)
+        time.sleep(2)
 
     i, j = -1, 0
     done = False
@@ -412,14 +421,27 @@ def gpt_proc(arglist):
         print("--------------------------------------------------------")
         print(f"i={i}")
 
-        agent1.reset_state()
-        while agent1.location is None:
-            if not(__update_state()):
-                time.sleep(1)
-
         if not(done):
             f = task_queue[j][0]
             arg = task_queue[j][1]
+
+            if str(agent1) in str(f):
+                print("agent1 is in the task")
+                g_keyboard.press('1')
+                g_keyboard.release('1')
+                agent1.reset_state()
+                while agent1.location is None:
+                    if not(__update_state()):
+                        time.sleep(1)
+            elif str(agent2) in str(f):
+                print("agent2 is in the task")
+                g_keyboard.press('2')
+                g_keyboard.release('2')
+                agent2.reset_state()
+                while agent2.location is None:
+                    if not(__update_state()):
+                        time.sleep(1)
+
             if f(arg):
                 print(colors.GREEN + f"task complete: {str(f)}({str(arg)})" + colors.ENDC)
                 j += 1
