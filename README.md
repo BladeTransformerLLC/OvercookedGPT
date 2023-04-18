@@ -31,7 +31,7 @@ python3 main.py --num-agents 2 --level partial-divider_salad --gpt --manual
 ```
 
 ## References
-1. Wu et. al., ["Too many cooks: Bayesian inference for coordinating multi-agent collaboration,"](https://arxiv.org/abs/2003.11778) 2021.
+1. Wu et. al., ["Too many cooks: Bayesian inference for coordinating multi-agent collaboration,"](https://arxiv.org/abs/2003.11778) 2020.
 2. Yang et. al., ["Foundation Models for Decision Making: Problems, Methods, and Opportunities,"](https://arxiv.org/abs/2303.04129) 2023.
 3. Lin et. al., ["Text2Motion: From Natural Language Instructions to Feasible Plans,"](https://arxiv.org/abs/2303.12153) 2023.
 4. Carroll et. al., ["On the Utility of Learning about Humansfor Human-AI Coordination,"](https://arxiv.org/abs/1910.05789) 2020.
