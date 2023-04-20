@@ -434,6 +434,10 @@ def gpt_proc(arglist):
         i += 1
         print("--------------------------------------------------------")
         print(f"i={i}")
+        if i == 100:
+            print(colors.RED + f"GAME OVER (100 steps consumed)" + colors.ENDC)
+            done = True
+            continue
 
         if not(done):
             f = task_queue[j][0]
