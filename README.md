@@ -8,7 +8,7 @@ An OpenAI gym environment to evaluate the ability of large language models (LLMs
 https://www.youtube.com/watch?v=4LmcpkS53Wg
 
 ## Introduction
-There is a new area of AI research where foundation models such as LLMs are used for decision making in complex environments that involve long-horizon reasoning, control, and planning [2]. For instance, [Text2Motion](https://sites.google.com/stanford.edu/text2motion) [3] enables robots to solve sequential manipulation tasks by using LLMs. OvercookedGPT is an interactive 2D environment where OpenAI's GPT-4/3.5-Turbo generates intertemporal and sequential tasks to control multiple agents to achieve a goal (i.e., cook food). It is based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1] and was also inspired by [overcooked_ai](https://github.com/HumanCompatibleAI/overcooked_ai) [4], which is used in [5].
+There is a new area of AI research where foundation models such as LLMs are used for decision making in complex environments that involve long-horizon reasoning, control, and planning [2]. For instance, [Text2Motion](https://sites.google.com/stanford.edu/text2motion) [3] enables robots to solve sequential manipulation tasks by using LLMs. OvercookedGPT is an interactive 2D environment where OpenAI's GPT-4/3.5-Turbo generates intertemporal and sequential tasks to control multiple agents to achieve a goal (i.e., cook food). It is based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1] and was also inspired by [overcooked_ai](https://github.com/HumanCompatibleAI/overcooked_ai) [4] (and which is used in [5].
 
 ## Installation
 ```
@@ -35,6 +35,11 @@ Mannually control agents with arrow keys (switch between agents by pressing 1 or
 ```
 python3 main.py --num-agents 2 --level partial-divider_salad --gpt --manual
 ```
+
+## ToDo
+- Allow simultaneous/parallel subtask execution by multiple agents within the same timestep
+- Prevent agents from moving through other agents (make them avoid/wait others)
+- Evaluate with 3 or more agents
 
 ## References
 1. Wu et. al., ["Too many cooks: Bayesian inference for coordinating multi-agent collaboration,"](https://arxiv.org/abs/2003.11778) 2020.
