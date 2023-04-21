@@ -96,6 +96,7 @@ class ChatBot:
 
 g_chatbot = None
 g_keyboard = Controller()
+g_max_steps = 100
 
 class GPTAgent:
     def __init__(self, id: int, arglist):
@@ -104,12 +105,22 @@ class GPTAgent:
         self.location = None
         self.on_hand = None
         self.level = None
+        self.item_locations = ITEM_LOCATIONS
         self.history = []
         self.prev_state = None
+        global g_max_steps
         if arglist.level == "open-divider_salad":
             self.level = OPEN_DIVIDER_SALAD
+        elif arglist.level == "open-divider_salad_large":
+            self.level = OPEN_DIVIDER_SALAD_L
+            self.item_locations = ITEM_LOCATIONS_L
+            g_max_steps = 200
         elif arglist.level == "partial-divider_salad":
             self.level = PARTIAL_DEVIDER_SALAD
+        elif arglist.level == "partial-divider_salad_large":
+            self.level = PARTIAL_DEVIDER_SALAD_L
+            self.item_locations = ITEM_LOCATIONS_L
+            g_max_steps = 200
         elif arglist.level == "full-divider_salad":
             self.level = FULL_DIVIDER_SALAD
         else:
@@ -130,7 +141,7 @@ class GPTAgent:
             if (self.prev_state[0] == location) and (self.prev_state[1] == action_str) and (self.prev_state[2] == action_loc):
                 return
         description = action_str
-        items: List[str] = identify_items_at(action_loc)
+        items: List[str] = identify_items_at(action_loc, self.item_locations)
         if len(items) > 0:
             # remove duplicated items
             if ("sliced" in description) or ("picked" in description):
@@ -148,7 +159,7 @@ class GPTAgent:
         self.history.append(description)
         if "picked" in description:
             # identify what item was picked up
-            for item in ITEM_LOCATIONS.keys():
+            for item in self.item_locations.keys():
                 if (item in description) and (item in MOVABLES):
                     if self.on_hand is None:
                         self.on_hand = [item]
@@ -160,7 +171,7 @@ class GPTAgent:
                 for item in MOVABLES:
                     for obj in self.on_hand:
                         if item in obj:
-                            ITEM_LOCATIONS[item] = action_loc
+                            self.item_locations[item] = action_loc
                 self.on_hand = None
         if self.on_hand is not None:
             print(colors.YELLOW + f"agent{self.id}.on_hand = {self.on_hand}" + colors.ENDC)
@@ -222,9 +233,9 @@ class GPTAgent:
             for obj in self.on_hand:
                 if item in obj:
                     return True  # item is already in hand
-        for key in ITEM_LOCATIONS.keys():
+        for key in self.item_locations.keys():
             if item == key:
-                destination, level = get_dst_tuple(item, self.level)
+                destination, level = get_dst_tuple(item, self.level, self.item_locations)
                 path: List[Tuple[int, int]] = find_path(self.location, destination, level)
                 print(colors.YELLOW + f"agent{self.id}.fetch(): path={path}" + colors.ENDC)
                 self.move_to(path[1])
@@ -243,10 +254,10 @@ class GPTAgent:
             return True
         destination, level = None, None
         if isinstance(item, str):
-            if not(item in ITEM_LOCATIONS.keys()):
+            if not(item in self.item_locations.keys()):
                 print(colors.RED + f"agent{self.id}.put_onto(): invalid item: {item}" + colors.ENDC)
                 return True
-            destination, level = get_dst_tuple(item, self.level)
+            destination, level = get_dst_tuple(item, self.level, self.item_locations)
         elif isinstance(item, tuple):
             pass #TODO: also accept 2D coordinate
         else:
@@ -263,13 +274,13 @@ class GPTAgent:
         Returns:
             bool: True if the task is closed
         """
-        if not(item in ITEM_LOCATIONS.keys()):
+        if not(item in self.item_locations.keys()):
             print(colors.RED + f"agent{self.id}.slice_on(): invalid item: {item}" + colors.ENDC)
             return True
         if not("cutboard" in item):
             print(colors.RED + f"agent{self.id}.slice_on(): cannot slice on {item}" + colors.ENDC)
             return True
-        destination: Tuple[int, int] = ITEM_LOCATIONS[item]
+        destination: Tuple[int, int] = self.item_locations[item]
         for description in self.history[::-1]:
             if ("put" in description) and (item in description):
                 self.move_to(destination)
@@ -285,7 +296,7 @@ class GPTAgent:
         Returns:
             bool: True if the task is closed
         """
-        destination = list(ITEM_LOCATIONS["star"])
+        destination = list(self.item_locations["star"])
         destination[0] += 1
         if self.move_to(tuple(destination)):
             # reached the destination
@@ -434,8 +445,9 @@ def gpt_proc(arglist):
         i += 1
         print("--------------------------------------------------------")
         print(f"i={i}")
-        if i == 100:
-            print(colors.RED + f"GAME OVER (100 steps consumed)" + colors.ENDC)
+        global g_max_steps
+        if i == g_max_steps:
+            print(colors.RED + f"GAME OVER ({g_max_steps} max steps consumed)" + colors.ENDC)
             done = True
             continue
 
