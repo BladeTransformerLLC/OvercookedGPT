@@ -47,9 +47,14 @@ with open("utils/chatgpt/openai.json", "r") as f:
 
 class ChatBot:
     def __init__(self, config: dict, arglist):
-        if not("OPENAI_API_KEY" in os.environ):
-            openai.api_key = config["access_token"]
+        self.api_key = None
+        if "OPENAI_API_KEY" in os.environ:
+            self.api_key: str = os.environ["OPENAI_API_KEY"]
+        else:
+            self.api_key: str = config["access_token"]
+        openai.api_key = self.api_key
         self.model: str = config["model"]
+        self.temperature = int(config["temperature"])
         self.messages: list = []
 
         instruction, example = None, None
@@ -81,22 +86,35 @@ class ChatBot:
 
     def __call__(self, message):
         self.messages.append({"role": "user", "content": message})
-        result: str = self.execute()
+        result: str = self.__execute()
         self.messages.append({"role": "assistant", "content": result})
         return result
 
-    def execute(self) -> str:
+    def __execute(self) -> str:
         try:
-            completion = openai.ChatCompletion.create(model=self.model, messages=self.messages)
-            #print(completion.usage) # number of tokens consumed
-            return completion.choices[0].message.content
+            completion = openai.ChatCompletion.create(
+                model=self.model,
+                messages=self.messages,
+                temperature=self.temperature,
+                stream=True  # use SSE (Server-Sent Events)
+            )
         except Exception as e:
             print(e)
-            return colors.RED + f"ERROR: {e}" + colors.ENDC
+            assert False, colors.RED + f"ERROR: {e}" + colors.ENDC
+        result = []
+        for chunk in completion:
+            chunk: dict = json.loads(str(chunk["choices"][0]["delta"]))
+            if "content" in chunk.keys():
+                chunk = str(chunk["content"])
+                print(colors.YELLOW + chunk + colors.ENDC, end="", flush=True)
+                result.append(chunk)
+        return ''.join(result)
+
 
 g_chatbot = None
 g_keyboard = Controller()
 g_max_steps = 100
+
 
 class GPTAgent:
     def __init__(self, id: int, arglist):
@@ -399,13 +417,13 @@ def gpt_proc(arglist):
         time.sleep(2)
         sys.stdin = open(0)  # input() does not work with multiprocessing without this line
         question = input(colors.GREEN + "Enter a task: " + colors.ENDC)
-        print(colors.YELLOW + "ChatGPT: Thinking...please wait..." + colors.ENDC)
+        print(colors.YELLOW + "ChatGPT: Thinking...please wait...\n" + colors.ENDC)
         num_retries = 0
         max_retries = 5
         while num_retries < max_retries:
             response: str = g_chatbot(question)
-            print("\n-------------------------- response --------------------------")
-            print(colors.YELLOW + "ChatGPT: " + colors.ENDC + response)
+            #print("\n-------------------------- response --------------------------")
+            #print(colors.YELLOW + "ChatGPT: " + colors.ENDC + response)
             code: str = __extract_python_code(response)
             if code is None:
                 print(colors.RED + "ERROR: no python code found in the response. Retrying..." + colors.ENDC)

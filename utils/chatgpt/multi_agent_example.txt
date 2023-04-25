@@ -17,7 +17,7 @@ task_queue.append((agent1.put_onto, "cutboard0"))
 # 5. agent1 slices the lettuce (lettuce is already on cutboard0). remember: only agent1 can slice foods
 task_queue.append((agent1.slice_on, "cutboard0"))
 
-# 6. agent2 picks up plate0
+# 6. agent2 picks up plate0. remember: only agent2 should pick up plates
 task_queue.append((agent2.fetch, "plate0"))
 
 # 7. agent2 puts plate0 onto counter0 for agent1
