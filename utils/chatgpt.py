@@ -54,7 +54,10 @@ class ChatBot:
             self.api_key: str = config["access_token"]
         openai.api_key = self.api_key
         self.model: str = config["model"]
-        self.temperature = int(config["temperature"])
+        self.temperature = float(config["temperature"])
+        self.top_p = float(config["top_p"])
+        self.max_tokens = int(config["max_tokens"])
+
         self.messages: list = []
 
         instruction, example = None, None
@@ -96,6 +99,10 @@ class ChatBot:
                 model=self.model,
                 messages=self.messages,
                 temperature=self.temperature,
+                top_p=self.top_p,
+                max_tokens=self.max_tokens,
+                frequency_penalty=0.0,
+                presence_penalty=0.0,
                 stream=True  # use SSE (Server-Sent Events)
             )
         except Exception as e:
