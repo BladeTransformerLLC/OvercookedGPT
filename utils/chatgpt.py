@@ -338,7 +338,6 @@ def gpt_proc(arglist):
     listener = Listener(("localhost", 6000)) # family is deduced to be 'AF_INET'
     #print(colors.GREEN + f"GPT listener.address: {listener.address}" + colors.ENDC)
     connection = None
-    #listener.close() #todo
 
     agent1 = GPTAgent(1, arglist)
     agent2 = GPTAgent(2, arglist)
@@ -465,6 +464,9 @@ def gpt_proc(arglist):
     while True:
         time.sleep(0.5)
         if done or arglist.manual:
+            if listener is not None:
+                listener.close()
+                listener = None
             continue
 
         i += 1
@@ -505,8 +507,4 @@ def gpt_proc(arglist):
                 if j == len(task_queue):
                     print(colors.GREEN + f"ALL TASKS COMPLETE: score={i} (lower the better)" + colors.ENDC)
                     done = True
-
-
-
-
 

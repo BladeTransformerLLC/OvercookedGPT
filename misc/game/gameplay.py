@@ -34,7 +34,6 @@ class GamePlay(Game):
                 self.gridsquare_types[name].add(gridsquare.location)
 
         self.client = None
-        #self.client.close() #todo
 
         self.current_frame: int = 0
         self.current_agent_id: int = 1
@@ -45,6 +44,7 @@ class GamePlay(Game):
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
+            self.client.close()
         elif event.type == pygame.KEYDOWN:
             # Save current image
             if event.key == pygame.K_RETURN:
