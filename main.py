@@ -1,7 +1,7 @@
 # from environment import OvercookedEnvironment
 # from gym_cooking.envs import OvercookedEnvironment
 from recipe_planner.recipe import *
-from utils.chatgpt import gpt_proc
+from utils.agent import llm_proc
 from utils.world import World
 from utils.agent import RealAgent, SimAgent, COLORS
 from utils.core import *
@@ -38,7 +38,8 @@ def parse_arguments():
     parser.add_argument("--main-cap", type=int, default=100, help="Max number of main loops in each run of BRTDP")
 
     # Visualizations
-    parser.add_argument("--gpt", action="store_true", default=False, help="Let GPT control the agents")
+    parser.add_argument("--gpt", action="store_true", default=False, help="Let ChatGPT control the agents")
+    parser.add_argument("--claude", action="store_true", default=False, help="Let Claude control the agents")
     parser.add_argument("--manual", action="store_true", default=False, help="Play interactive game with keys")
     parser.add_argument("--debug", action="store_true", default=False, help="Debug with pre-defined agent actions")
     parser.add_argument("--record", action="store_true", default=False, help="Save observation at each time step as an image in misc/game/record")
@@ -130,8 +131,8 @@ def start_game(arglist):
 
 if __name__ == '__main__':
     arglist = parse_arguments()
-    if arglist.gpt:
-        p = Process(target=gpt_proc, args=(arglist,))
+    if arglist.gpt or arglist.claude:
+        p = Process(target=llm_proc, args=(arglist,))
         p.start()  # enters loop
         start_game(arglist) # enters loop
         if p.is_alive():

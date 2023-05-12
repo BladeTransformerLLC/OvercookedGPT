@@ -1,0 +1,8 @@
+{
+    "access_token": "",
+    "model": "claude-v1.3",
+    "temperature": 0.1,
+    "top_k": -1,
+    "top_p": -1.0,
+    "max_tokens_to_sample": 1000
+}

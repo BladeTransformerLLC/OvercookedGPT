@@ -13,3 +13,25 @@ class colors:
     YELLOW = "\033[33m"
     BLUE = "\033[34m"
 
+
+import re
+__code_block_regex = re.compile(r"```(.*?)```", re.DOTALL)
+def extract_python_code(content: str) -> str:
+    global __code_block_regex
+    code_blocks: list = __code_block_regex.findall(content)
+    if code_blocks:
+        full_code = "\n"
+        for block in code_blocks:
+            if block.startswith("python"):
+                full_code += block[7:] + "\n"
+            elif block.startswith(" python"):
+                full_code += block[8:] + "\n"
+            else:
+                #pass
+                full_code += block[0:] + "\n"
+        print(colors.GREEN + "\n=========== execution =============")
+        print(full_code)
+        print("===================================" + colors.ENDC)
+        return full_code
+    else:
+        return None
