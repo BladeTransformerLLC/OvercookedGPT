@@ -62,18 +62,21 @@ class Claude:
                 model=self.model,
                 temperature=self.temperature,
                 max_tokens_to_sample=self.max_tokens,
-                stream=False,
+                stream=True,
             )
         except Exception as e:
             print(e)
             assert False, colors.RED + f"ERROR: {e}" + colors.ENDC
         result = ''
-        for chunk in completion:
-            if "completion" in chunk.keys():
-                result = chunk["completion"]
-                #print(result, end='\r')
-            if "stop" in chunk.keys():
-                if chunk["stop"] == anthropic.HUMAN_PROMPT:
+        for c in completion:
+            if "completion" in c.keys():
+                chunk: str = c["completion"]
+                if len(result) > 0:
+                    chunk = chunk[chunk.find(result)+len(result):]
+                print(colors.YELLOW + chunk + colors.ENDC, end="", flush=True)
+                result += chunk
+            if "stop" in c.keys():
+                if c["stop"] == anthropic.HUMAN_PROMPT:
                     break
         print(colors.YELLOW + result + colors.ENDC)
         return result
