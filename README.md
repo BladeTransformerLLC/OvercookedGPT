@@ -47,11 +47,11 @@ python3 main.py --num-agents 2 --level partial-divider_salad --gpt --manual
 - Evaluate with 3 or more agents in large levels
 
 ## References
-1. Wu et. al., ["Too many cooks: Bayesian inference for coordinating multi-agent collaboration,"](https://arxiv.org/abs/2003.11778) 2020.
-2. Yang et. al., ["Foundation Models for Decision Making: Problems, Methods, and Opportunities,"](https://arxiv.org/abs/2303.04129) 2023.
-3. Lin et. al., ["Text2Motion: From Natural Language Instructions to Feasible Plans,"](https://arxiv.org/abs/2303.12153) 2023.
-4. Carroll et. al., ["On the Utility of Learning about Humans for Human-AI Coordination,"](https://arxiv.org/abs/1910.05789) 2020.
-5. Hong et. al., ["Learning to Influence Human Behavior with Offline Reinforcement Learning,"](https://arxiv.org/abs/2303.02265) 2023.
+1. Wu et al., ["Too many cooks: Bayesian inference for coordinating multi-agent collaboration,"](https://arxiv.org/abs/2003.11778) 2020.
+2. Yang et al., ["Foundation Models for Decision Making: Problems, Methods, and Opportunities,"](https://arxiv.org/abs/2303.04129) 2023.
+3. Lin et al., ["Text2Motion: From Natural Language Instructions to Feasible Plans,"](https://arxiv.org/abs/2303.12153) 2023.
+4. Carroll et al., ["On the Utility of Learning about Humans for Human-AI Coordination,"](https://arxiv.org/abs/1910.05789) 2020.
+5. Hong et al., ["Learning to Influence Human Behavior with Offline Reinforcement Learning,"](https://arxiv.org/abs/2303.02265) 2023.
 6. Moghaddam & Honey, ["Boosting Theory-of-Mind Performance in Large Language Models via Prompting,"](https://arxiv.org/abs/2304.11490) 2023.
-7. Gao et. al., ["PAL: Program-aided Language Models,"](https://arxiv.org/abs/2211.10435) 2022.
-8. Fu et. al., ["Complexity-Based Prompting for Multi-Step Reasoning,"](https://arxiv.org/abs/2210.00720) 2022.
+7. Gao et al., ["PAL: Program-aided Language Models,"](https://arxiv.org/abs/2211.10435) 2022.
+8. Fu et al., ["Complexity-Based Prompting for Multi-Step Reasoning,"](https://arxiv.org/abs/2210.00720) 2022.
