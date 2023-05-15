@@ -12,6 +12,9 @@ There is a new area of AI research where foundation models such as LLMs are used
 
 OvercookedGPT is an interactive 2D game environment where OpenAI's GPT-4/3.5-Turbo as well as Anthropic's Claude generate intertemporal and sequential tasks in a centralized fashion to control multiple agents to achieve a goal in a simulation (i.e., to cook food at a kitchen). It is based on [gym-cooking](https://github.com/rosewang2008/gym-cooking) [1] and was also inspired by [overcooked_ai](https://github.com/HumanCompatibleAI/overcooked_ai) [4] (which is used in [5]). The purpose of this simulator is to evaluate the ability of the LLMs in long-horizon reasoning and task planning in dynamic multi-agent environments. To this end, in-context learning (i.e., few-shot learning with prompt engineering methods of CoT and PAL [7]) is used to guide the LLMs to generate a task queue in Python that is executed by the simulator on the fly. As shown in [8], the reasoning performance of LLMs improves with an increased degree of input prompt complexity, where complex prompts achieve better performance than simple ones.
 
+## How does ICL work?
+OvercookedGPT uses ICL (in-context learning) to guide LLMs to generate a task queue to control multiple agents, but why/how can LLMs (whose parameters including the W_Q, W_K and W_V matrices in the Transformer attention are "frozen") perform an unseen, non-pretrained language task by merely observing a few demonstrations? [9] shows that LLMs have the ability to override semantic priors when presented with demonstration examples (input-label pairs) despite the stronger semantic priors that the models may hold (which ability is an emergent phenomena unlocked by model scaling). Moreover, [10] suggests that LLMs perform gradient descent in ICL through forward computation (whereas explicit finetuning computes gradients by back-propagation) - ICL can therefore be considered as implicit finetuning. 
+
 ## Installation
 ```
 python3 -m pip install -U pygame --user
@@ -55,3 +58,5 @@ python3 main.py --num-agents 2 --level partial-divider_salad --gpt --manual
 6. Moghaddam & Honey, ["Boosting Theory-of-Mind Performance in Large Language Models via Prompting,"](https://arxiv.org/abs/2304.11490) 2023.
 7. Gao et al., ["PAL: Program-aided Language Models,"](https://arxiv.org/abs/2211.10435) 2022.
 8. Fu et al., ["Complexity-Based Prompting for Multi-Step Reasoning,"](https://arxiv.org/abs/2210.00720) 2022.
+9. Wei et al., ["Larger language models do in-context learning differently,"](https://arxiv.org/abs/2303.03846) 2023.
+10. Dai et al., ["Why Can GPT Learn In-Context? Language Models Secretly Perform Gradient Descent as Meta-Optimizers,"](https://arxiv.org/abs/2212.10559) 2022.
